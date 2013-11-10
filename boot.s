@@ -21,7 +21,10 @@ stack_top:
 _start:
 	movl $stack_top, %esp
 
+	call kernel_early_main
+	call _init
 	call kernel_main
+	call _fini
 
 	cli
 	hlt
