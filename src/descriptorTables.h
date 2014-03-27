@@ -4,6 +4,7 @@
 #include "utility.h"
 
 LINKAGE_BEGIN
+#pragma pack(push, 1)
 struct GDT_Entry
 {
 	uint16_t limitLow;
@@ -70,5 +71,6 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+#pragma pack(pop)
 LINKAGE_END
 

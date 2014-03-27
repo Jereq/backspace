@@ -60,13 +60,16 @@ void kernel_early_main()
 
 void kernel_main()
 {
-	//initDescriptorTables();
+	initDescriptorTables();
 
 	Terminal term;
 	term.clear();
 	term.writeString("Hello, kernel World!\nNext line\n");
 	term.writeString("Second call\n");
 	term.writeColoredString("$7Hello $FMaster$7, $4welcome $7home!\n");
+	
+	asm volatile ("int $0x3");
+	asm volatile ("int $0x4");
 }
 LINKAGE_END
 
