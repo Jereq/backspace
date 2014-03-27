@@ -8,9 +8,11 @@
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
 
-#include "utility.h"
 #include "descriptorTables.h"
+#include "isr.h"
 #include "Terminal.h"
+#include "Timer.h"
+#include "utility.h"
 
 void insertNum(int num, char* begin, char* end)
 {
@@ -64,12 +66,15 @@ void kernel_main()
 
 	Terminal term;
 	term.clear();
-	term.writeString("Hello, kernel World!\nNext line\n");
-	term.writeString("Second call\n");
 	term.writeColoredString("$7Hello $FMaster$7, $4welcome $7home!\n");
 	
 	asm volatile ("int $0x3");
 	asm volatile ("int $0x4");
+	
+	asm volatile("sti");
+	initTimer(100);
+	
+	for (;;);
 }
 LINKAGE_END
 

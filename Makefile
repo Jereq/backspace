@@ -20,6 +20,7 @@ gdt.o \
 interrupt.o \
 isr.o \
 Terminal.o \
+Timer.o \
 
 # Alter paths to be in source directory
 OBJS:=$(addprefix $(BUILD_DIR)/,$(OBJS))
@@ -47,7 +48,18 @@ $(BUILD_DIR)/interrupt.o: $(SRC_DIR)/interrupt.s
 	nasm $(AS_FLAGS) $< -o $@
 
 # Add dependency on headers
-$(BUILD_DIR)/kernel.o $(BUILD_DIR)/Terminal.o : $(SRC_DIR)/Terminal.h $(SRC_DIR)/common.h
+COMMON_H:=$(SRC_DIR)/common.h
+ISR_H:=$(SRC_DIR)/isr.h
+TERMINAL_H:=$(SRC_DIR)/Terminal.h $(COMMON_H)
+TIMER_H:=$(SRC_DIR)/Timer.h
+UTILITY_H:=$(SRC_DIR)/utility.h
+DESCRIPTOR_TABLES_H:=$(SRC_DIR)/descriptorTables.h $(UTILITY_H)
+
+$(BUILD_DIR)/descriptorTables.o : $(DESCRIPTOR_TABLES_H) $(COMMON_H) $(ISR_H) $(UTILITY_H)
+$(BUILD_DIR)/isr.o : $(ISR_H) $(COMMON_H) $(TERMINAL_H) $(UTILITY_H)
+$(BUILD_DIR)/kernel.o : $(DESCRIPTOR_TABLES_H) $(ISR_H) $(TERMINAL_H) $(TIMER_H) $(UTILITY_H)
+$(BUILD_DIR)/Terminal.o : $(TERMINAL_H)
+$(BUILD_DIR)/Timer.o : $(TIMER_H) $(ISR_H) $(TERMINAL_H)
 
 # Add cpp runtime environement supporting files
 CRTI_OBJ:=$(BUILD_DIR)/crti.o
