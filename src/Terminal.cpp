@@ -131,6 +131,34 @@ void Terminal::writeDec(int32_t num)
 	}
 }
 
+void Terminal::writeHex(uint32_t num)
+{
+	if (num == 0)
+	{
+		putChar('0');
+		return;
+	}
+	
+	char buffer[8];
+	size_t digits = 0;
+	while (num > 0)
+	{
+		char nextDigit = (char)(num % 0x10);
+		if (nextDigit < 10)
+			buffer[digits] = '0' + nextDigit;
+		else
+			buffer[digits] = 'a' + nextDigit - 10;
+			
+		num >>= 4;
+		++digits;
+	}
+	
+	for (size_t i = digits; i > 0; --i)
+	{
+		putChar(buffer[i - 1]);
+	}
+}
+
 void Terminal::moveCursor()
 {
 	uint16_t cursorLocation = row * 80 + column;

@@ -28,6 +28,8 @@ constexpr size_t IRQ13 = 45;
 constexpr size_t IRQ14 = 46;
 constexpr size_t IRQ15 = 47;
 
+void clearInterruptHandlers();
+
 typedef void (*isr_t)(registers);
 void registerInterruptHandler(uint8_t n, isr_t handler);
 

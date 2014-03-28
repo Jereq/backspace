@@ -10,6 +10,7 @@
 
 #include "descriptorTables.h"
 #include "isr.h"
+#include "paging.h"
 #include "Terminal.h"
 #include "Timer.h"
 #include "utility.h"
@@ -66,13 +67,14 @@ void kernel_main()
 
 	Terminal term;
 	term.clear();
-	term.writeColoredString("$7Hello $FMaster$7, $4welcome $7home!\n");
 	
-	asm volatile ("int $0x3");
-	asm volatile ("int $0x4");
+	initializePaging();
+	
+	term.writeColoredString("$7Hello $FMaster$7, $4welcome $7home!\n");
 	
 	asm volatile("sti");
 	initTimer(100);
+	term.writeDec(*(uint32_t*)0xABADF00D);
 	
 	for (;;);
 }

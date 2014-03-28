@@ -20,6 +20,7 @@ IDT_Ptr idt_ptr;
 
 void initDescriptorTables()
 {
+	clearInterruptHandlers();
 	initGDT();
 	initIDT();
 }

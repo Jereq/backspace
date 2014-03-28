@@ -10,8 +10,15 @@ LINKAGE_BEGIN
 
 void isrHandler(registers regs)
 {
+	const isr_t interruptHandler = interruptHandlers[regs.intNo];
+	if (interruptHandler != nullptr)
+	{
+		interruptHandler(regs);
+		return;
+	}
+
 	Terminal term;
-	term.writeString("received interrupt: ");
+	term.writeString("unhandled interrupt: ");
 	term.writeDec(regs.intNo);
 	term.putChar('\n');
 }
@@ -25,14 +32,20 @@ void irqHandler(registers regs)
 	
 	outb(0x20, 0x20);
 	
-	if (interruptHandlers[regs.intNo] != 0)
+	const isr_t interruptHandler = interruptHandlers[regs.intNo];
+	if (interruptHandler != nullptr)
 	{
-		isr_t handler  = interruptHandlers[regs.intNo];
-		handler(regs);
+		interruptHandler(regs);
+		return;
 	}
 }
 
 LINKAGE_END
+
+void clearInterruptHandlers()
+{
+	memset(interruptHandlers, 0, sizeof(interruptHandlers));
+}
 
 void registerInterruptHandler(uint8_t n, isr_t handler)
 {

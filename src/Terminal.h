@@ -83,6 +83,7 @@ public:
 	void writeString(const char* data);
 	void writeColoredString(const char* data);
 	void writeDec(int32_t num);
+	void writeHex(uint32_t num);
 	
 	static void moveCursor();
 };
