@@ -10,6 +10,8 @@
 
 #include "descriptorTables.h"
 #include "isr.h"
+#include "knew.h"
+#include "OrderedArray.h"
 #include "paging.h"
 #include "Terminal.h"
 #include "Timer.h"
@@ -74,7 +76,33 @@ void kernel_main()
 	
 	asm volatile("sti");
 	initTimer(100);
-	term.writeDec(*(uint32_t*)0xABADF00D);
+	
+	OrderedArray<int, 8> array;
+	array.insert(3);
+	array.insert(1);
+	array.insert(1234);
+	array.insert(0);
+	array.insert(1);
+	
+	term.writeString("Removing array[3] = ");
+	term.writeDec(array[3]);
+	term.putChar('\n');
+	array.erase(array.begin() + 3);
+	
+	size_t count = 0;
+	for (int i : array)
+	{
+		term.writeString("array[");
+		term.writeDec(count++);
+		term.writeString("] = ");
+		term.writeDec(i);
+		term.putChar('\n');
+	}
+	
+	typedef OrderedArray<int, 8> Arr;
+	char cArray[sizeof(Arr)];
+	Arr* tArr = new (cArray) Arr;
+	tArr->~Arr();
 	
 	for (;;);
 }

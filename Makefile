@@ -60,12 +60,14 @@ DESCRIPTOR_TABLES_H:=$(SRC_DIR)/descriptorTables.h $(UTILITY_H)
 KHEAP_H:=$(SRC_DIR)/kheap.h
 PAGING_H:=$(SRC_DIR)/paging.h $(COMMON_H) $(ISR_H)
 ERROR_HANDLING_H:=$(SRC_DIR)/errorHandling.h
+ORDERED_ARRAY_H:=$(SRC_DIR)/OrderedArray.h
+KNEW_H:=$(SRC_DIR)/knew.h
 
 $(BUILD_DIR)/descriptorTables.o : $(DESCRIPTOR_TABLES_H) $(COMMON_H) $(ISR_H) $(UTILITY_H)
 $(BUILD_DIR)/errorHandling.o : $(ERROR_HANDLING_H) $(TERMINAL_H)
 $(BUILD_DIR)/isr.o : $(ISR_H) $(COMMON_H) $(TERMINAL_H) $(UTILITY_H)
-$(BUILD_DIR)/kernel.o : $(DESCRIPTOR_TABLES_H) $(ISR_H) $(PAGING_H) $(TERMINAL_H) $(TIMER_H) $(UTILITY_H)
-$(BUILD_DIR)/kheap.o : $(KHEAP_H)
+$(BUILD_DIR)/kernel.o : $(DESCRIPTOR_TABLES_H) $(ISR_H) $(KNEW_H) $(ORDERED_ARRAY_H) $(PAGING_H) $(TERMINAL_H) $(TIMER_H) $(UTILITY_H)
+$(BUILD_DIR)/kheap.o : $(KHEAP_H) $(ORDERED_ARRAY_H)
 $(BUILD_DIR)/paging.o : $(PAGING_H) $(ERROR_HANDLING_H) $(KHEAP_H) $(TERMINAL_H) $(UTILITY_H)
 $(BUILD_DIR)/Terminal.o : $(TERMINAL_H)
 $(BUILD_DIR)/Timer.o : $(TIMER_H) $(ISR_H) $(TERMINAL_H)
